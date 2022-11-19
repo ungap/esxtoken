@@ -1,0 +1,36 @@
+{
+  "name": "esxtoken",
+  "version": "0.0.0",
+  "description": "The ESXToken class",
+  "main": "./cjs/index.js",
+  "scripts": {
+    "build": "npm run cjs",
+    "cjs": "ascjs --no-default esm cjs"
+  },
+  "keywords": [
+    "esx",
+    "polyfill"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "ascjs": "^5.0.1"
+  },
+  "module": "./esm/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "default": "./cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ungap/esxtoken.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ungap/esxtoken/issues"
+  },
+  "homepage": "https://github.com/ungap/esxtoken#readme"
+}
