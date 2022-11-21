@@ -14,13 +14,13 @@ export default class ESXToken {
   // these are here to simplify, via a namespace, a possible Babel transformer
 
   // child / properties
-  static create = (type, value) => ({__proto__: ESXToken.prototype, type, value});
+  /** @private */ static create = (type, value) => ({__proto__: ESXToken.prototype, type, value});
 
   // specialized cases
-  static property = (type, name, value) => ({__proto__: ESXToken.prototype, type, name, value});
-  static template = (id, value) => ({__proto__: ESXToken.prototype, type: ESXToken.TEMPLATE_TYPE, id, value});
-  static chevron = (type, value, properties, children) => ({__proto__: ESXToken.prototype, type, value, properties, children});
-  static fragment = (...children) => ESXToken.chevron(ESXToken.FRAGMENT_TYPE, null, null, children);
-  static element = (tag, properties, ...children) => ESXToken.chevron(ESXToken.ELEMENT_TYPE, tag, properties, children);
-  static component = (fn, properties, ...children) => ESXToken.chevron(ESXToken.COMPONENT_TYPE, fn, properties, children);
+  /** @private */ static property = (type, name, value) => ({__proto__: ESXToken.prototype, type, name, value});
+  /** @private */ static template = (id, value) => ({__proto__: ESXToken.prototype, type: ESXToken.TEMPLATE_TYPE, id, value});
+  /** @private */ static chevron = (type, value, properties, children) => ({__proto__: ESXToken.prototype, type, value, properties, children});
+  /** @private */ static fragment = (...children) => ESXToken.chevron(ESXToken.FRAGMENT_TYPE, null, null, children);
+  /** @private */ static element = (tag, properties, ...children) => ESXToken.chevron(ESXToken.ELEMENT_TYPE, tag, properties, children);
+  /** @private */ static component = (fn, properties, ...children) => ESXToken.chevron(ESXToken.COMPONENT_TYPE, fn, properties, children);
 }
