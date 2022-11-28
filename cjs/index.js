@@ -7,6 +7,9 @@ module.exports = (() => {
   const INTERPOLATION = 5;
   const STATIC        = 6;
 
+  const {assign} = Object;
+  const _ = [];
+
   class ESXToken {
     static ATTRIBUTE =      ATTRIBUTE;
     static COMPONENT =      COMPONENT;
@@ -16,12 +19,12 @@ module.exports = (() => {
     static STATIC =         STATIC;
 
     // transformer utilities
-    /** @protected */ static _ = [];
+    /** @protected */ static _ = _;
     /** @protected */ static a = (dynamic, name, value) => ({type: ATTRIBUTE, dynamic, name, value});
     /** @protected */ static i = value => ({type: INTERPOLATION, value});
     /** @protected */ static s = value => ({type: STATIC, value});
-    /** @protected */ static c = (id, value, attributes, children) => new ESXComponent(id, value, attributes, children);
-    /** @protected */ static e = (id, name, attributes, children) => new ESXElement(id, name, attributes, children);
+    /** @protected */ static c = (id, value, attributes, children = _) => new ESXComponent(id, value, attributes, children);
+    /** @protected */ static e = (id, name, attributes, children = _) => new ESXElement(id, name, attributes, children);
     /** @protected */ static f = (id, children) => new ESXFragment(id, children);
 
     // subclasses super constructor
@@ -36,11 +39,15 @@ module.exports = (() => {
       this.attributes = attributes;
       this.children = children;
     }
+    get properties() {
+      const {attributes} = this;
+      return attributes === _ ? null : attributes.reduce(properties, {});
+    }
   }
 
   class ESXFragment extends ESXNode {
     constructor(id, children) {
-      super(FRAGMENT, id, ESXToken._, children);
+      super(FRAGMENT, id, _, children);
     }
   }
 
@@ -57,4 +64,12 @@ module.exports = (() => {
   }
 
   return ESXToken;
+
+  function properties(props, attr) {
+    if (attr.type === INTERPOLATION)
+      assign(props, attr.value);
+    else
+      props[attr.name] = attr.value;
+    return props;
+  }
 })();
