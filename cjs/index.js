@@ -1,27 +1,60 @@
 'use strict';
-module.exports = class ESXToken {
-  // property/ies + interpolations + templates
-  static STATIC_TYPE      = 1 << 0; // 1
-  static MIXED_TYPE       = 1 << 1; // 2
-  static RUNTIME_TYPE     = 1 << 2; // 4
-  static TEMPLATE_TYPE    = 1 << 3; // 8
-  
-  // angle-brackets kind
-  static ELEMENT_TYPE     = 1 << 6; // 64
-  static FRAGMENT_TYPE    = 1 << 7; // 128
-  static COMPONENT_TYPE   = 1 << 8; // 256
+module.exports = (() => {
+  const ATTRIBUTE     = 1;
+  const COMPONENT     = 2;
+  const ELEMENT       = 3;
+  const FRAGMENT      = 4;
+  const INTERPOLATION = 5;
+  const STATIC        = 6;
 
-  // the following utilities DO NOT NEED TO BE AVAILABLE or standardized
-  // these are here to simplify, via a namespace, a possible Babel transformer
+  class ESXToken {
+    static ATTRIBUTE =      ATTRIBUTE;
+    static COMPONENT =      COMPONENT;
+    static ELEMENT =        ELEMENT;
+    static FRAGMENT =       FRAGMENT;
+    static INTERPOLATION =  INTERPOLATION;
+    static STATIC =         STATIC;
 
-  // child / properties
-  /** @private */ static create = (type, value) => ({__proto__: ESXToken.prototype, type, value});
+    // transformer utilities
+    /** @protected */ static _ = [];
+    /** @protected */ static a = (dynamic, name, value) => ({type: ATTRIBUTE, dynamic, name, value});
+    /** @protected */ static i = value => ({type: INTERPOLATION, value});
+    /** @protected */ static s = value => ({type: STATIC, value});
+    /** @protected */ static c = (id, value, attributes, children) => new ESXComponent(id, value, attributes, children);
+    /** @protected */ static e = (id, name, attributes, children) => new ESXElement(id, name, attributes, children);
+    /** @protected */ static f = (id, children) => new ESXFragment(id, children);
 
-  // specialized cases
-  /** @private */ static property = (type, name, value) => ({__proto__: ESXToken.prototype, type, name, value});
-  /** @private */ static template = (id, value) => ({__proto__: ESXToken.prototype, type: ESXToken.TEMPLATE_TYPE, id, value});
-  /** @private */ static chevron = (type, value, properties, children) => ({__proto__: ESXToken.prototype, type, value, properties, children});
-  /** @private */ static fragment = (...children) => ESXToken.chevron(ESXToken.FRAGMENT_TYPE, null, null, children);
-  /** @private */ static element = (tag, properties, ...children) => ESXToken.chevron(ESXToken.ELEMENT_TYPE, tag, properties, children);
-  /** @private */ static component = (fn, properties, ...children) => ESXToken.chevron(ESXToken.COMPONENT_TYPE, fn, properties, children);
-}
+    // subclasses super constructor
+    /** @protected */ constructor(type) {
+      this.type = type;
+    }
+  }
+
+  class ESXNode extends ESXToken {
+    constructor(type, id, attributes, children) {
+      super(type).id = id;
+      this.attributes = attributes;
+      this.children = children;
+    }
+  }
+
+  class ESXFragment extends ESXNode {
+    constructor(id, children) {
+      super(FRAGMENT, id, ESXToken._, children);
+    }
+  }
+
+  class ESXElement extends ESXNode {
+    constructor(id, name, attributes, children) {
+      super(ELEMENT, id, attributes, children).name = name;
+    }
+  }
+
+  class ESXComponent extends ESXNode {
+    constructor(id, value, attributes, children) {
+      super(COMPONENT, id, attributes, children).value = value;
+    }
+  }
+
+  return ESXToken;
+})();

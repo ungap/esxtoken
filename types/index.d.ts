@@ -1,12 +1,11 @@
 declare global {
   class ESXToken {
-    static STATIC_TYPE: number;
-    static MIXED_TYPE: number;
-    static RUNTIME_TYPE: number;
-    static TEMPLATE_TYPE: number;
-    static ELEMENT_TYPE: number;
-    static FRAGMENT_TYPE: number;
-    static COMPONENT_TYPE: number;
+    static ATTRIBUTE: number;
+    static COMPONENT: number;
+    static ELEMENT: number;
+    static FRAGMENT: number;
+    static INTERPOLATION: number;
+    static STATIC: number;
   }
 }
 
