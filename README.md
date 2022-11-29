@@ -2,7 +2,7 @@
 
 The latest *ESXToken* polyfill [as discussed in TC39](https://es.discourse.group/t/proposal-esx-as-core-js-feature/1511).
 
-While the poly is extremely fine-tuned for [its Babel transformer](https://github.com/ungap/babel-plugin-transform-esx), the abstract representation of the proposal is the following one:
+While the poly is extremely fine-tuned for terseness, performance, and [its current Babel transformer](https://github.com/ungap/babel-plugin-transform-esx), the abstract representation of the proposal is the following one:
 
 ```ts
 class ESXToken {
@@ -50,6 +50,6 @@ class ESXComponent extends ESXNode {
   type = ESXToken.COMPONENT;
   value: function;
   attributes: (ESXAttribute | ESXInterpolation)[];
-  properties: object?;
+  get properties(): object?;
 }
 ```
