@@ -4,8 +4,9 @@
   "description": "The ESXToken class",
   "main": "./cjs/index.js",
   "scripts": {
-    "build": "npm run cjs",
-    "cjs": "ascjs --no-default esm cjs"
+    "build": "npm run cjs && npm test",
+    "cjs": "ascjs --no-default esm cjs",
+    "test": "c8 node test/index.js"
   },
   "keywords": [
     "esx",
@@ -14,7 +15,8 @@
   "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
-    "ascjs": "^5.0.1"
+    "ascjs": "^5.0.1",
+    "c8": "^7.12.0"
   },
   "module": "./esm/index.js",
   "types": "./types/index.d.ts",
