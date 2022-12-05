@@ -24,8 +24,8 @@ const f = ESXToken.f(1, [2, 3, 4]);
 assert(f.type, ESXToken.FRAGMENT);
 assert(f.id, 1);
 assert(f.children.join(','), '2,3,4');
-assert(f.attributes, null);
-assert(f.value, null);
+assert(f.attributes, ESXToken._);
+assert(f.value, void 0);
 
 const e = ESXToken.e(f, 'div', [a, i], [3, 4]);
 assert(e.type, ESXToken.ELEMENT);

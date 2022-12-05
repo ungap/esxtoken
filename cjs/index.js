@@ -21,16 +21,17 @@ module.exports = ((
     /** @private */ static a = (dynamic, name, value) => ({type: ATTRIBUTE, dynamic, name, value});
     /** @private */ static i = value => ({type: INTERPOLATION, value});
     /** @private */ static s = value => ({type: STATIC, value});
-    /** @private */ static c = (id, value, attributes, children = _) => new ESXToken(COMPONENT, id, children, attributes, value);
-    /** @private */ static e = (id, name, attributes, children = _) => new ESXToken(ELEMENT, id, children, attributes, name);
-    /** @private */ static f = (id, children) => new ESXToken(FRAGMENT, id, children, null, null);
+    /** @private */ static c = (id, value, attributes, children = _) => new ESXToken(COMPONENT, id, children, attributes, value.name, value);
+    /** @private */ static e = (id, name, attributes, children = _) => new ESXToken(ELEMENT, id, children, attributes, name, name);
+    /** @private */ static f = (id, children) => new ESXToken(FRAGMENT, id, children, _);
 
     /** @private */
-    constructor(type, id, children, attributes, value) {
+    constructor(type, id, children, attributes, name, value) {
       this.type = type;
       this.id = id;
       this.children = children;
       this.attributes = attributes;
+      this.name = name;
       this.value = value;
     }
 
