@@ -1,6 +1,6 @@
 'use strict';
 module.exports = ((
-  properties, _,
+  {assign}, _,
   ATTRIBUTE,
   COMPONENT,
   ELEMENT,
@@ -38,14 +38,19 @@ module.exports = ((
     /** @type {object?} an accessor to forward properties */
     get properties() {
       const {attributes} = this;
-      return attributes === _ ? null : attributes.reduce(properties, {});
+      if (attributes !== _) {
+        const properties = {};
+        for (const entry of attributes) {
+          if (entry.type === ATTRIBUTE)
+            properties[entry.name] = entry.value;
+          else
+            assign(properties, entry.value);
+        }
+        return properties;
+      }
+      return null;
     }
   }
 ))(
-  (props, item) => (
-    item.type === 5 ?
-      Object.assign(props, item.value) :
-      ((props[item.name] = item.value), props)
-  ),
-  [], 1, 2, 3, 4, 5, 6
+  Object, [], 1, 2, 3, 4, 5, 6
 );
