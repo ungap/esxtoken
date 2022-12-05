@@ -1,5 +1,5 @@
 export default ((
-  {assign}, _,
+  {assign}, $, _,
   ATTRIBUTE,
   COMPONENT,
   ELEMENT,
@@ -20,16 +20,29 @@ export default ((
     /** @private */ static a = (dynamic, name, value) => ({type: ATTRIBUTE, dynamic, name, value});
     /** @private */ static i = value => ({type: INTERPOLATION, value});
     /** @private */ static s = value => ({type: STATIC, value});
-    /** @private */ static c = (id, value, attributes, children = _) => new ESXToken(COMPONENT, id, children, attributes, value.name, value);
-    /** @private */ static e = (id, name, attributes, children = _) => new ESXToken(ELEMENT, id, children, attributes, name, name);
-    /** @private */ static f = (id, children) => new ESXToken(FRAGMENT, id, children, _);
+    /** @private */ static c = (id, value, attributes, children = _) => ESXToken.v(COMPONENT, id, attributes, children, value.name, value);
+    /** @private */ static e = (id, name, attributes, children = _) => ESXToken.v(ELEMENT, id, attributes, children, name, name);
+    /** @private */ static f = (id, children) => ESXToken.v(FRAGMENT, id, _, children);
+    /** @private */ static v = (type, id, attributes, children, name, value) => {
+      let token = new ESXToken(type, attributes, children, name, value);
+      if (id) {
+        const known = $.get(id);
+        if (known) {
+          known.attributes = token.attributes;
+          known.children = token.children;
+          token = known;
+        }
+        else
+          $.set(id, token);
+      }
+      return token;
+    };
 
     /** @private */
-    constructor(type, id, children, attributes, name, value) {
+    constructor(type, attributes, children, name, value) {
       this.type = type;
-      this.id = id;
-      this.children = children;
       this.attributes = attributes;
+      this.children = children;
       this.name = name;
       this.value = value;
     }
@@ -51,5 +64,5 @@ export default ((
     }
   }
 ))(
-  Object, [], 1, 2, 3, 4, 5, 6
+  Object, new WeakMap, [], 1, 2, 3, 4, 5, 6
 );

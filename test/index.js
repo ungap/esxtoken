@@ -20,16 +20,18 @@ const s = ESXToken.s(123);
 assert(s.type, ESXToken.STATIC);
 assert(s.value, 123);
 
-const f = ESXToken.f(1, [2, 3, 4]);
+const f = ESXToken.f(o, [2, 3, 4]);
+assert(f, ESXToken.f(o, [2, 3, 4]));
 assert(f.type, ESXToken.FRAGMENT);
-assert(f.id, 1);
 assert(f.children.join(','), '2,3,4');
+ESXToken.f(o, [5, 6, 7]);
+assert(f.children.join(','), '5,6,7');
 assert(f.attributes, ESXToken._);
 assert(f.value, void 0);
 
 const e = ESXToken.e(f, 'div', [a, i], [3, 4]);
+assert(e, ESXToken.e(f, 'div', [a, i], [3, 4]));
 assert(e.type, ESXToken.ELEMENT);
-assert(e.id, f);
 assert(e.children.join(','), '3,4');
 assert(e.attributes.length, 2);
 assert(e.attributes[0], a);
@@ -38,8 +40,8 @@ assert(e.value, 'div');
 assert(JSON.stringify(e.properties), '{"a":1,"b":345}');
 
 const c = ESXToken.c(e, Object, ESXToken._, [2, 3, 4]);
+assert(c, ESXToken.c(e, Object, ESXToken._, [2, 3, 4]));
 assert(c.type, ESXToken.COMPONENT);
-assert(c.id, e);
 assert(c.children.join(','), '2,3,4');
 assert(c.attributes.join(','), '');
 assert(c.value, Object);
