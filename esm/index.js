@@ -12,11 +12,11 @@ export default class ESXToken {
   static _ = Object.freeze([]);
 
   /** @private */
-  constructor(id, type, children, attributes, name, value) {
+  constructor(id, type, attributes, children, name, value) {
     this.id = id;
     this.type = type;
-    this.children = children;
     this.attributes = attributes;
+    this.children = children;
     this.name = name;
     this.value = value;
   }

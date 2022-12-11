@@ -6,9 +6,9 @@ const assert = (value, expected, message = `expected ${expected} but got ${value
     throw new Error(message);
 };
 
-const ESXTokenC = (id, value, attributes, children) => new ESXToken(id, ESXToken.COMPONENT, children, attributes, value.name, value);
-const ESXTokenE = (id, name, attributes, children) => new ESXToken(id, ESXToken.ELEMENT, children, attributes, name, name);
-const ESXTokenF = (id, children) => new ESXToken(id, ESXToken.FRAGMENT, children, ESXToken._);
+const ESXTokenC = (id, value, attributes, children) => new ESXToken(id, ESXToken.COMPONENT, attributes, children, value.name, value);
+const ESXTokenE = (id, name, attributes, children) => new ESXToken(id, ESXToken.ELEMENT, attributes, children, name, name);
+const ESXTokenF = (id, children) => new ESXToken(id, ESXToken.FRAGMENT, ESXToken._, children);
 
 const o = {b: 345};
 const a = {type: ESXToken.ATTRIBUTE, name: 'a', value: 1};
