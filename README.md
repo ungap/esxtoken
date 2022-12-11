@@ -40,7 +40,9 @@ interface ESXStatic {
 }
 
 interface ESXNode extends ESXToken {
+  id: null | object;
   children: (ESXStatic | ESXInterpolation | ESXNode)[];
+  get properties(): object?;
 }
 
 class ESXFragment extends ESXNode {
@@ -49,14 +51,15 @@ class ESXFragment extends ESXNode {
 
 class ESXElement extends ESXNode {
   type = ESXToken.ELEMENT;
+  name: string;
   value: string;
   attributes: (ESXAttribute | ESXInterpolation)[];
 }
 
 class ESXComponent extends ESXNode {
   type = ESXToken.COMPONENT;
+  name: string;
   value: function;
   attributes: (ESXAttribute | ESXInterpolation)[];
-  get properties(): object?;
 }
 ```

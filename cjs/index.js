@@ -1,69 +1,39 @@
 'use strict';
-module.exports = ((
-  {assign}, $, _,
-  ATTRIBUTE,
-  COMPONENT,
-  ELEMENT,
-  FRAGMENT,
-  INTERPOLATION,
-  STATIC
-) => (
-  class ESXToken {
-    static ATTRIBUTE =      ATTRIBUTE;
-    static COMPONENT =      COMPONENT;
-    static ELEMENT =        ELEMENT;
-    static FRAGMENT =       FRAGMENT;
-    static INTERPOLATION =  INTERPOLATION;
-    static STATIC =         STATIC;
+/** (c) Andrea Giammarchi - ISC */
 
-    // transformer utilities
-    /** @private */ static _ = _;
-    /** @private */ static a = (dynamic, name, value) => ({type: ATTRIBUTE, dynamic, name, value});
-    /** @private */ static i = value => ({type: INTERPOLATION, value});
-    /** @private */ static s = value => ({type: STATIC, value});
-    /** @private */ static c = (id, value, attributes, children = _) => ESXToken.v(COMPONENT, id, attributes, children, value.name, value);
-    /** @private */ static e = (id, name, attributes, children = _) => ESXToken.v(ELEMENT, id, attributes, children, name, name);
-    /** @private */ static f = (id, children) => ESXToken.v(FRAGMENT, id, _, children);
-    /** @private */ static v = (type, id, attributes, children, name, value) => {
-      let token = new ESXToken(type, attributes, children, name, value);
-      if (id) {
-        const known = $.get(id);
-        if (known) {
-          known.attributes = token.attributes;
-          known.children = token.children;
-          token = known;
-        }
-        else
-          $.set(id, token);
-      }
-      return token;
-    };
+module.exports = class ESXToken {
+  static ATTRIBUTE =      1;
+  static COMPONENT =      2;
+  static ELEMENT =        3;
+  static FRAGMENT =       4;
+  static INTERPOLATION =  5;
+  static STATIC =         6;
 
-    /** @private */
-    constructor(type, attributes, children, name, value) {
-      this.type = type;
-      this.attributes = attributes;
-      this.children = children;
-      this.name = name;
-      this.value = value;
-    }
+  /** @private */
+  static _ = Object.freeze([]);
 
-    /** @type {object?} an accessor to forward properties */
-    get properties() {
-      const {attributes} = this;
-      if (attributes !== _) {
-        const properties = {};
-        for (const entry of attributes) {
-          if (entry.type === ATTRIBUTE)
-            properties[entry.name] = entry.value;
-          else
-            assign(properties, entry.value);
-        }
-        return properties;
-      }
-      return null;
-    }
+  /** @private */
+  constructor(id, type, children, attributes, name, value) {
+    this.id = id;
+    this.type = type;
+    this.children = children;
+    this.attributes = attributes;
+    this.name = name;
+    this.value = value;
   }
-))(
-  Object, new WeakMap, [], 1, 2, 3, 4, 5, 6
-);
+
+  get properties() {
+    const {attributes} = this;
+    if (attributes.length) {
+      const properties = {};
+      for (const entry of attributes) {
+        if (entry.type < 2)
+          properties[entry.name] = entry.value;
+        else
+          Object.assign(properties, entry.value);
+      }
+      return properties;
+    }
+    return null;
+  }
+}
