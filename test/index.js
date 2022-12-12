@@ -11,8 +11,8 @@ const ESXTokenE = (id, name, attributes, children) => new ESXToken(id, ESXToken.
 const ESXTokenF = (id, children) => new ESXToken(id, ESXToken.FRAGMENT, ESXToken._, children);
 
 const o = {b: 345};
-const a = {type: ESXToken.ATTRIBUTE, name: 'a', value: 1};
-const i = {type: ESXToken.INTERPOLATION, value: o};
+const a = ESXToken.a(false, 'a', 1);
+const i = ESXToken.b(ESXToken.INTERPOLATION, o);
 
 const f = ESXTokenF(o, [2, 3, 4]);
 assert(f.id, ESXTokenF(o, [2, 3, 4]).id);

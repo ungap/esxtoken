@@ -12,6 +12,12 @@ export default class ESXToken {
   static _ = Object.freeze([]);
 
   /** @private */
+  static a = (dynamic, name, value) => ({type: 1, dynamic, name, value});
+
+  /** @private */
+  static b = (type, value) => ({type, value});
+
+  /** @private */
   constructor(id, type, attributes, children, name, value) {
     this.id = id;
     this.type = type;
